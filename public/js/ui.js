@@ -2,10 +2,12 @@ class UI{
     constructor(){
         this.login = document.querySelector('.login');
         this.authorized = document.querySelector('.authorized');
-        this.roomsList = document.querySelector('.room-list');
+        this.roomsList = document.querySelector('.rooms-list');
         this.usersList = document.querySelector('.users-list');
         this.messageContainer = document.querySelector('.message-container');
+    }
 
+    showLogin(){
 
     }
 
@@ -16,6 +18,11 @@ class UI{
     showAuthorized(){
         this.authorized.style.display = 'block';
     }
+
+    hideAuthorized(){
+
+    }
+
     generateRooms(rooms){
         rooms.forEach(room => this.roomsList.insertAdjacentHTML('beforeend', UI.roomListTemplate(room)));
     }

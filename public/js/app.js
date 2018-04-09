@@ -1,5 +1,5 @@
 const socket = io();
-const ui = new UI;
+const ui = new UI();
 
 //init elements
 
@@ -8,7 +8,7 @@ const userName = loginForm.elements['username'];
 const messageForm = document.forms['send-message'];
 const message = messageForm.elements['message'];
 
-loginForm.addEventListener('summit', function (e) {
+loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
     if(userName.value) {
         const name = userName.value;
@@ -17,6 +17,7 @@ loginForm.addEventListener('summit', function (e) {
         ui.showAuthorized();
     }
 });
+
 messageForm.addEventListener('submit', function (e) {
     e.preventDefault();
     if(message.value){
