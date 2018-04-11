@@ -1,5 +1,6 @@
 const socket = io();
 const ui = new UI();
+const userMessage = UserMessage.getInstance();
 
 //init elements
 
@@ -13,8 +14,7 @@ loginForm.addEventListener('submit', function (e) {
     if(userName.value) {
         const name = userName.value;
         socket.emit('new user', name);
-        ui.hideLogin();
-        ui.showAuthorized();
+        userMessage.setUser(name);
     }
 });
 
@@ -25,9 +25,12 @@ messageForm.addEventListener('submit', function (e) {
         message.value = '';
     }
 });
-//socket events
 
-socket.on('welcome', (room) => console.log(room));
+//socket events
+socket.on('welcome', room => {
+    ui.hideLogin();
+    ui.showAuthorized();
+});
 socket.on('rooms', rooms => ui.generateRooms(rooms));
 socket.on('updateusers', users => ui.generateUsersInRoom(users));
 socket.on('chat message', message => ui.addMessage(message));

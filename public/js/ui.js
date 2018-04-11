@@ -5,6 +5,8 @@ class UI{
         this.roomsList = document.querySelector('.rooms-list');
         this.usersList = document.querySelector('.users-list');
         this.messageContainer = document.querySelector('.message-container');
+        this.userNameNew = document.querySelector('.user-name')
+        this.user = UserMessage.getInstance();
     }
 
     showLogin(){
@@ -16,6 +18,8 @@ class UI{
     }
 
     showAuthorized(){
+        let homeUser = this.user.getUser();
+        this.userNameNew.innerText = `${homeUser.username}`;
         this.authorized.style.display = 'block';
     }
 
@@ -24,6 +28,7 @@ class UI{
     }
 
     generateRooms(rooms){
+        this.roomsList.innerHTML = '';
         rooms.forEach(room => this.roomsList.insertAdjacentHTML('beforeend', UI.roomListTemplate(room)));
     }
 
@@ -35,11 +40,39 @@ class UI{
     }
 
     addMessage(message){
-        this.messageContainer.insertAdjacentHTML('beforeend', UI.messageTemplate(message))
+        let className = this.testUser(message);
+        this.messageContainer.insertAdjacentHTML('beforeend', UI.messageTemplate(message,className))
     }
 
-    newUserJoin(message){
+    newUserJoin(name){
+        this.messageContainer.innerHTML='';
         this.messageContainer.insertAdjacentHTML('beforeend', UI.newUserTemplate(name))
+    }
+
+    testUser(response){
+        let homeUser = this.user.getUser();
+        if(response.username === homeUser.username){
+            return {
+                class:'from',
+                color:'blue-grey darken-1'
+            }
+        }else{
+            return{
+                class:'to',
+                color:'lime darken-4'
+            }
+        }
+    }
+
+    static messageTemplate(msg, className){
+        return `<div class="message ${className.class}">
+                    <div class="card ${className.color}">
+                        <div class="card-content white-text">
+                            <p>${msg.username} говорит:</p>
+                            <span>${msg.message}</span>
+                        </div>
+                    </div>
+                </div>`
     }
 
     static roomListTemplate(room){
@@ -50,20 +83,10 @@ class UI{
         return `<li class="collection-item" data-user-id="${id}">${name}</li>`;
     }
 
-    static messageTemplate(msg){
-        return `<div class="message">
-                    <div class="card blue-grey darken-1">
-                        <div class="card-content white-text">
-                            <p>${msg.message}</p>
-                        </div>
-                    </div>
-                </div>`;
-    }
-
     static newUserTemplate(name){
         return `<div class="card teal lighten-2">
                     <div class="card-content white-text">
-                        <p>New user: ${name}</p>
+                        <p>Add new user: ${name}</p>
                     </div>
                 </div>`;
     }
